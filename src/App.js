@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload } from 'lucide-react';
-import './index.css'; 
+import './index.css';
 
 const navigation = [
   { name: 'Upload', href: '/upload' },
@@ -11,6 +11,7 @@ const navigation = [
 function EjarLanding() {
   const [file, setFile] = React.useState(null);
   const [pathname, setPathname] = React.useState('');
+  const [analysisResult, setAnalysisResult] = React.useState('');
 
   React.useEffect(() => {
     setPathname(window.location.pathname);
@@ -18,7 +19,25 @@ function EjarLanding() {
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0]);
+      const selectedFile = event.target.files[0];
+      const allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ];
+      if (allowedTypes.includes(selectedFile.type)) {
+        setFile(selectedFile);
+        setAnalysisResult(''); 
+      } else {
+        alert('Please select a PDF or Word document.');
+      }
+    }
+  };
+
+  const handleAnalyze = () => {
+    if (file) {
+      //  االملف هنا، بعدها تأخذه وتحلله والنتيجة ممكن تُعرض بالدالة إلي تحتها، وعاد بالمتغيرات تتحكم بها
+      setAnalysisResult(`Analysis complete for ${file.name}`);
     }
   };
 
@@ -35,7 +54,7 @@ function EjarLanding() {
                 {navigation.map((item) => (
                   <li key={item.href}>
                     <a
-                      className={`duration-150 hover:text-zinc-50 ${
+                      className={`duration-150 font-sans hover:text-zinc-50 font-light ${
                         pathname === item.href ? 'text-zinc-200' : 'text-zinc-400'
                       }`}
                       href={item.href}
@@ -74,10 +93,11 @@ function EjarLanding() {
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
-                accept=".pdf,.doc,.docx,.txt"
+                accept=".pdf,.doc,.docx"
               />
             </label>
             <button
+              onClick={handleAnalyze}
               className={`mt-6 px-6 py-2 rounded-full text-sm font-semibold transition-colors ${
                 file
                   ? 'bg-zinc-100 text-zinc-900 hover:bg-white'
@@ -87,6 +107,9 @@ function EjarLanding() {
             >
               {file ? 'Analyze Document' : 'Select a document to analyze'}
             </button>
+            {analysisResult && (
+              <div className="mt-4 text-zinc-200">{analysisResult}</div>
+            )}
           </div>
         </div>
       </main>
