@@ -1,4 +1,4 @@
-# Ejar Frontend 
+# Ejar Frontend -- Using React.js
 
 ## Prerequisites
 
