@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# Ejar Frontend 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Prerequisites
 
-## Available Scripts
+- **Node.js** (version 14 or higher)
+- **npm** (Node Package Manager)
 
-In the project directory, you can run:
+## How to Run the Project Locally
 
-### `npm start`
+### 1. Clone the Repository
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Clone the repository to your local machine using the following command:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+git clone https://github.com/Mohammedbbk/Ejar.git
+```
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. Install Dependencies
 
-### `npm run build`
+Navigate to the project directory and install the required packages:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd Ejar
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Run the Application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Start the application on your local machine:
 
-### `npm run eject`
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The application will open at `http://localhost:3000`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## How to Integrate the AI Backend Model
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 1. Integration Point
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- In the file `EjarLanding.js`, locate the `handleAnalyze` function.
+- This function is where you should integrate the AI model.
+- Currently, it simulates analysis with the following line:
 
-## Learn More
+  ```jsx
+  setAnalysisResult(`Analysis complete for ${file.name}`);
+  ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 3. Modifying the Frontend to Call the API
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Replace the simulated analysis in `handleAnalyze` with an actual API call.
+- Example using `fetch`:
 
-### Code Splitting
+  ```jsx
+  const handleAnalyze = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+      fetch('http://localhost:5000/analyze', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setAnalysisResult(data.result);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  };
+  ```
 
-### Analyzing the Bundle Size
+- Ensure the API returns a JSON response containing the analysis result.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 4. Running the Backend API
 
-### Making a Progressive Web App
+- Run your AI model's API server on a specific port (e.g., 5000).
+- Configure **CORS** if necessary to allow the frontend to access the API.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Notes
 
-### Advanced Configuration
+- Only PDF and Word document types are accepted.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
